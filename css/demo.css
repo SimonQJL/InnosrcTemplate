@@ -1,0 +1,21 @@
+body {
+  position: relative;
+}
+nav{
+  margin:2%;
+}
+li{
+  list-style-type:none;
+}
+a:hover{
+  text-decoration:none;
+}
+.content{
+ width:80%;
+}
+.tip{
+position:fixed;/*固定作用*/
+right:1%;
+top:1%;	
+width:15%;
+}

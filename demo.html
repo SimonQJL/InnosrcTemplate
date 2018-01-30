@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en" class="js flexbox canvas canvastext webgl no-touch geolocation postmessage websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="renderer" content="webkit">
+    <meta name="baidu-site-verification" content="HuKZbEtsCC" />
+    <title>Innosrc_</title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link rel="stylesheet" href="css/demo.css">
+	<link rel="stylesheet" href="css/code.css">
+     <script src="js/jquery.min.js" ></script>
+	 <script src="js/bootstrap.js"></script>
+</head>
+<body data-spy="scroll" data-target="#navbar-example">
+<nav class="content">
+<div>
+ <h1 id="scoket" class="page-header" >WebScoket連接</h1>
+	<figure>
+	 <pre>
+	 <code class="language-html" data-lang="html">
+	     需要引用SockJS: <a href="http://map.innosrc.cn:8888/js/sockjs.min.js" target="_blank">http://map.innosrc.cn:8888/js/sockjs.min.js</a>
+		 var cbSockjs = new SockJS(url + 'websocket-server');//服務器地址
+		 stompClient = Stomp.over(cbSockjs);
+		 stompClient.debug = false;
+		 stompClient.connect({}, function(frame) {
+			stompClient.subscribe('/client/cb', function(greeting) {
+				var cbs = JSON.parse(greeting.body);//JSON.parse()解析JSON字符串，构造由字符串描述的JavaScript值或对象，JSON.stringify()反之
+			});
+		});
+	 </code>
+	 </pre>
+	</figure>
+</div>
+<div>
+ <h1 id="ajax" class="page-header" >ajax基本配置</h1>
+	<figure>
+	 <pre>
+	 <code class="language-html" data-lang="html">
+		$.ajax({
+			type: "Post",
+			url:'ServerUrl',
+			dataType: "json",
+			data:{
+			 time: new Date(),
+			 },
+			beforeSend:function(){
+			//button設置成disable或者是顯示加載中
+			},
+			success:function(datas){
+			//處理數據，button恢復正常，去除加載
+			},
+			error: function() {
+			   //return 404 page
+			}});
+	 </code>
+	 </pre>
+	</figure>
+</div>
+<div>
+ <h1 id="smoove" class="page-header" >CSS3動畫效果+lazy延时加载处理图片</h1>
+	<figure>
+	 <pre>
+	 <code class="language-html" data-lang="html">
+	  需要引用Smoove: <a href="http://cdnjs.cloudflare.com/ajax/libs/jquery-smoove/0.2.6/jquery.smoove.min.js" target="_blank">http://cdnjs.cloudflare.com/ajax/libs/jquery-smoove/0.2.6/jquery.smoove.min.js</a>
+	  $(function () {
+		$('.block').smoove({offset:'40%'});//頁面加載調用smoove方法
+      });
+	  class="block"//模块定义对象 
+	  data-move-y="200px",data-move-x="-200px",data-move-z="-200px"//模塊绕X,Y,Z轴转动的不同可以自己定義组合任意的动画,
+	  Demo: <a href="demo/service.html" target="_blank">Demo</a>
+	  //图片延迟加载
+	   $("img.lazy").lazyload({
+	          effect: "fadeIn" //滚动条滑动到该图片时开始加载，减缓一次性加载大量图片所花的时间
+			  threshold :180 //提前180px加载图片
+			  event: 'click',  // 事件触发时才加载
+			  container: $("#container"),//对某容器中的图片实现效果
+        });
+       class='lazy' data-original='img/anli/1-16030G933240-L.jpg'//定义img属性，
+	 </code>
+	 </pre>
+	</figure>
+</div>
+<div>
+ <h1 id="upload" class="page-header" >上传图片</h1>
+	<figure>
+	 <pre>
+	 <code class="language-html" data-lang="html">
+        
+    // 依赖插件
+    // jquery-1.11.1.min.js"
+    // quantize.js"
+    // color-thief.js"
+    // lrz.bundle.js"
+    // layer.js"
+
+      // 图片上传压缩提交
+      var desiredWidth;
+      console.log('onReady');
+      $("#UploadImg").on("change",gotPic);
+      $("#UploadFile").on("change",gotPic);
+          desiredWidth = window.innerWidth;
+          if(!("url" in window) && ("webkitURL" in window)) {
+              window.URL = window.webkitURL;
+          }
+
+      });
+
+      // 图片压缩方法及提交图片
+      function gotPic(event) {
+          //等待
+          layer.load('',{shade: [0.8, '#393D49'], time: 40000});
+          //此处关闭
+          setTimeout(function(){
+              layer.closeAll('loading');
+          }, 20000);
+          if(event.target.files.length == 1 && event.target.files[0].type.indexOf("image/") == 0) {
+              lrz(event.target.files[0], {
+                  // 图片压缩  定义图片宽度  图片压缩品质
+                  width: 600,quality: 0.9})
+                      .then(function (rst) {
+                          // 处理成功会执行
+                          var jsbase = rst.base64;
+                        
+                          $.ajax({
+                              type:'post',
+                              dataType:'json',
+                              data:{'jsbase':jsbase},
+                              url:"/Pc/Index/PostHead",
+                              async:true,
+                              success:function(json) {
+                                  if(json.status == 200){
+                                      window.location.href="/Pc/Index/cropheader";
+                                  }else{
+                                      alert("圖片處理失敗");
+                                      return false;
+                                  }
+                              }
+                          });
+
+                      })
+                      .catch(function (err) {
+                          alert("圖片處理失敗，請從新選擇！");
+                          // 处理失败会执行
+                      })
+          }
+      }
+	 </code>
+	 </pre>
+	</figure>
+</div>
+<div>
+ <h1 id="canvas" class="page-header" >canvas切圖</h1>
+	<figure>
+	 <pre>
+	 <code class="language-html" data-lang="html">
+      // 依赖插件
+		// jquery-1.11.1.min.js
+		// html2canvas.min.js
+		// canvas2image.js
+		// base64.js
+		// jquery.range.js
+
+        // 基础配置
+        var config = {
+            width : $(".item").width(),        // 设置canvas的宽
+            height : $(".item").height(),        // 设置canvas的高
+            imgSrc : "{$head}",    // 图片路径
+            maxScale : 4.0,        // 最大放大倍数
+            minScale : 0.1,        // 最小放大倍数
+            step : 0.1            // 每次放大、缩小 倍数的变化值
+        };
+
+        // 标记是否移动事件
+        var isMove = false;
+
+        var imgStatus = {
+            'scale' : 1,
+            'rotate' : 0
+        };
+        var lastStatus = {};
+        var currentStatus = {};
+
+        var canvas = document.getElementById("canvas");
+        canvas.width = config.width;
+        canvas.height = config.height;
+        var ctx = canvas.getContext("2d");
+
+        var img = new Image();
+        img.src = config.imgSrc;
+
+        function getCoords(e) {
+            if (e.offsetX) {
+                // Works in Chrome / Safari (except on iPad/iPhone)
+                return { x: e.offsetX, y: e.offsetY };
+            }
+            else if (e.layerX) {
+                // Works in Firefox
+                return { x: e.layerX, y: e.layerY };
+            }
+            else {
+                // Works in Safari on iPad/iPhone
+                return { x: e.pageX - canvas.offsetLeft,
+                    y: e.pageY - canvas.offsetTop };
+            }
+        }    
+
+
+        img.onload = function() {
+            lastStatus = {
+                "imgX" : -1 * img.width / 2,
+                "imgY" : -1 * img.height / 2,
+                'mouseX' : 0,
+                'mouseY' : 0,
+                'translateX' : canvas.width / 2,
+                'translateY' : canvas.height /2,
+                'scale' : 1.0,
+                'rotate' : 0,
+                'distance': 0,
+                'p2': 0
+            };
+            drawImgByStatus(canvas.width / 2, canvas.height / 2);
+        };
+
+        canvas.onmousedown = function(e) {
+
+            isMove = true;
+            canvas.style.cursor = "move";
+
+            var box = windowToCanvas(e.clientX, e.clientY);
+            lastStatus.mouseX = box.x;
+            lastStatus.mouseY = box.y;
+        }
+
+        canvas.onmouseout = function(e) {
+            isMove = false;
+            canvas.style.cursor = "default";
+        }
+
+        canvas.onmouseup = function(e) {
+            isMove = false;
+            canvas.style.cursor = "default";
+        }
+
+        canvas.onmousemove = function(e) {
+            if(isMove) {
+                var box = windowToCanvas(e.clientX, e.clientY);
+                drawImgByMove(box.x, box.y);
+            }
+        }
+
+
+        canvas.ontouchstart = function(e) {
+        var touchobj = e.changedTouches[0];
+            isMove = true;
+            canvas.style.cursor = "move";
+
+            var box = windowToCanvas(parseInt(touchobj.clientX), parseInt(touchobj.clientY));
+            lastStatus.mouseX = box.x;
+            lastStatus.mouseY = box.y;
+        }
+
+        canvas.ontouchmove = function(e) {
+        if (e.touches.length==2) { 
+            p1 = getCoords(e.touches[0])
+            p2 = getCoords(e.touches[1])
+            if (lastStatus.distance==0) {
+                lastStatus.distance = p2.x-p1.x
+            } else {
+                cd = Math.abs(p2.x-p1.x)
+                if (lastStatus.distance==cd) {
+                } else if (cd > lastStatus.distance) {
+                    s = imgStatus.scale-0+0.05;
+                    if (s>1.5) s = imgStatus.scale;
+                                imgStatus.scale = s;
+                            drawImgByStatus(canvas.width / 2, canvas.height / 2);
+                } else if (cd < lastStatus.distance) {
+                    s = imgStatus.scale-0-0.05;
+                    if (s<0.3) s = imgStatus.scale;
+                                imgStatus.scale = s ;
+                            drawImgByStatus(canvas.width / 2, canvas.height / 2);
+                }
+
+
+                // rotate手指旋转功能（未完善）
+                // lastStatus.distance = cd
+                // pp = (p2.x<p1.x) ?  p1.y: p2.y;
+
+                // if (!lastStatus.p2) {
+                //     lastStatus.p2 = pp
+                // } else if (lastStatus.p2>pp) {
+                //     imgStatus.rotate = imgStatus.rotate-0-2
+                //             drawImgByStatus(canvas.width / 2, canvas.height / 2);
+                //     lastStatus.p2 = pp
+                // } else if (lastStatus.p2<pp) {
+                //     imgStatus.rotate = imgStatus.rotate-0+2
+                //             drawImgByStatus(canvas.width / 2, canvas.height / 2);
+                //     lastStatus.p2 = pp
+                // }
+            }
+        } else if (e.touches.length==1) {
+            var touchobj = e.changedTouches[0]
+            if(isMove) {
+            var box =windowToCanvas(parseInt(touchobj.clientX), parseInt(touchobj.clientY));
+            drawImgByMove(box.x, box.y);
+            }
+        }
+            ev = e||event;
+        ev.stopPropagation();
+        ev.preventDefault();
+        }
+
+
+        canvas.ontouchend = function(e) {
+            isMove = false;
+            canvas.style.cursor = "default";
+        }
+
+
+
+
+        // 鼠标缩放事件
+        // canvas.onmousewheel = function(e) {
+        //     if(e.wheelDelta > 0) {
+        //         imgStatus.scale = (imgStatus.scale >= config.maxScale) ? config.maxScale : imgStatus.scale + config.step;
+        //         if (imgStatus !=  lastStatus) {
+        //             var _scale = (imgStatus.scale >= config.maxScale) ? config.maxScale : imgStatus.scale ;
+        //             console.log(_scale);
+        //             var rangeScale = parseInt($(".pointer-label").eq(1).html())
+        //             var _scale_ = _scale + rangeScale;
+
+        //             console.log(_scale_);
+        //             $(".pointer-label").eq(1).html(_scale_);
+        //         };
+        //     } else {
+        //         imgStatus.scale = (imgStatus.scale <= config.minScale) ? config.minScale : imgStatus.scale - config.step;
+        //     }
+
+        //     var mXY = windowToCanvas(e.clientX, e.clientY);
+        //     drawImgByStatus(mXY.x, mXY.y);
+        //     ev = e||event;
+        //     ev.stopPropagation();
+        //     ev.preventDefault();
+        // };
+
+
+
+        function drawImgByMove(x, y) {
+            lastStatus.translateX = lastStatus.translateX + (x - lastStatus.mouseX);
+            lastStatus.translateY = lastStatus.translateY + (y - lastStatus.mouseY);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.save();
+            ctx.translate(lastStatus.translateX, lastStatus.translateY);
+            ctx.rotate(imgStatus.rotate * Math.PI / 180);
+            ctx.scale(imgStatus.scale, imgStatus.scale);
+            ctx.drawImage(img, lastStatus.imgX, lastStatus.imgY, img.width, img.height);
+            ctx.restore();
+
+            lastStatus.mouseX = x;
+            lastStatus.mouseY = y;
+        }
+
+        function drawImgByStatus(x, y) {
+            var imgX = lastStatus.imgX - (x - lastStatus.translateX) / lastStatus.scale;
+            var imgY = lastStatus.imgY - (y - lastStatus.translateY) / lastStatus.scale;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.rotate(imgStatus.rotate * Math.PI / 180);
+            ctx.scale(imgStatus.scale, imgStatus.scale);
+            ctx.drawImage(img, imgX, imgY, img.width, img.height);
+            ctx.restore();
+
+            lastStatus = {
+                'imgX' : imgX,
+                'imgY' : imgY,
+                'translateX' : x,
+                'translateY' : y,
+                'scale' : imgStatus.scale,
+                'rotate' : imgStatus.rotate
+            };
+        }
+
+        /**
+         * 计算相对于canvas左上角的坐标值
+         */
+        function windowToCanvas(x, y) {
+            var box = canvas.getBoundingClientRect();
+            return {
+                'x' : x - box.left,
+                'y' : y - box.top
+            };
+        }
+
+
+
+
+        // 点击确认对图片进行压缩保存提交
+        var click = document.getElementById("btnPng");
+        btnPng.onclick=function(){
+            //等待
+            layer.load('',{shade: [0.8, '#393D49'], time: 40000});
+            //此处关闭
+            setTimeout(function(){
+                layer.closeAll('loading');
+            }, 40000);
+            var oCanvas = document.getElementById("canvas");
+            var img_data = oCanvas.toDataURL('image/png');
+                // console.log(img_data)
+            // return;
+            var jsbase= img_data;
+
+            var imgtype = $("#imgtype").val();
+            $.ajax({
+              type:'post',
+              dataType:'json',
+              data:{'jsbase':jsbase,'imgtype':imgtype},
+              url:"/Pc/Index/SavePhoto",
+              async:true,
+              success:function(json) {
+                  if(json.status == 200){
+                      window.location.href="/Pc/Index/upload";
+                  }else if(json.status == 109){
+                      window.location.href="/Pc/Index/share?uid="+json.uid;
+                  }else if(json.status == 600){
+                      window.location.href="/Pc/Index/preview";
+                  } else{
+                      alert("圖片處理失敗");
+                      return false;
+                  }
+              }
+            });
+        }
+
+
+        // 滑动条缩放旋转功能
+        // 
+        //左右滑动放大缩小
+        var text = $('.scale').jRange({
+            from: 0,    //开始于
+            to: 100,    //结束于
+            step: 1,    //一次滑动多少
+            scale: [],  //分割点
+            format: '%s',   //格式化格式
+            width: 3+"rem",    //宽度
+            showLabels: false,
+            showScale: false,
+            onstatechange:function(){
+                var initial = 50;   //初始值
+                var Callback = $(".scale").val();   //滑动的数值
+                var sliding = '';   //滑动的倍数
+
+                var difference = initial - Callback;
+                if(difference > 0){
+                    sliding = 1-(difference/initial);
+                    if(sliding <=0.1){
+                        sliding=0.1;
+                    }
+                    imgStatus.scale = sliding;
+                    drawImgByStatus(canvas.width / 2, canvas.height / 2);
+                        //document.getElementById("aaaa").value=sliding;
+                }else if(difference < 0){
+                    sliding = Callback/initial;
+                    imgStatus.scale = sliding;
+                    drawImgByStatus(canvas.width / 2, canvas.height / 2);
+                }else{
+                    imgStatus.scale = 1;
+                }
+            }
+        });
+
+        //360度翻转
+        $('.rotate').jRange({
+            from: 0,        //开始于
+            to: 100,        //结束于
+            step: 1,        //一次滑动多少
+            scale: [],      //分割点
+            format: '%s',       //格式化格式
+            width: 3+"rem",        //宽度
+            showLabels: false,
+            showScale: false,
+            onstatechange:function(){
+                var initial = 50;       //初始值
+                var Callback = $(".rotate").val();      //滑动的数值
+                var average = 180/initial;      //180度平均成50等份
+                var sliding = '';       //翻转的度数
+
+                var difference = initial - Callback;
+                if(difference > 0){
+                    var preg = 50-Callback;
+                    sliding = preg*average;
+                    imgStatus.rotate = -sliding;
+                    drawImgByStatus(canvas.width / 2, canvas.height / 2);
+                    //document.getElementById("aaaa").value=sliding;
+                } else if(difference < 0){
+                    var preg = Callback-50;
+                    sliding = preg*average;
+                    imgStatus.rotate = sliding;
+                    drawImgByStatus(canvas.width / 2, canvas.height / 2);
+                }else{
+                    imgStatus.rotate = 0;
+                    drawImgByStatus(canvas.width / 2, canvas.height / 2);
+                }
+            }
+        });
+
+	 </code>
+	 </pre>
+	</figure>
+</div>
+<div>
+ <h1 id="fangda" class="page-header" >canvas放大鏡</h1>
+	<figure>
+	 <pre>
+	 <code class="language-html" data-lang="html"> 
+        var canvas = document.getElementById("canvas")  
+        var context = canvas.getContext("2d")  
+  
+        var offCanvas = document.getElementById("offCanvas")  
+        var offContext = offCanvas.getContext("2d")  
+  
+        var image = new Image()  
+        var isMouseDown = false  
+        var scale  
+  
+        window.onload = function(){  
+  
+            canvas.width = 1152  
+            canvas.height = 768  
+  
+            image.src = "img-lg.jpg"  
+            image.onload = function(){  
+  
+                offCanvas.width = image.width  
+                offCanvas.height = image.height  
+                scale = offCanvas.width / canvas.width  
+  
+                context.drawImage( image , 0 , 0 , canvas.width , canvas.height )  
+                offContext.drawImage( image , 0 , 0 )  
+            }  
+        }  
+  
+        function windowToCanvas( x , y ){  
+            var bbox = canvas.getBoundingClientRect()  
+            return {x:x-bbox.left , y:y-bbox.top}  
+        }  
+  
+        canvas.onmousedown = function(e){  
+            e.preventDefault()  
+            isMouseDown = true  
+            point = windowToCanvas( e.clientX , e.clientY )  
+            console.log( point.x , point.y )  
+            drawCanvasWithMagnifier( true , point )  
+        }  
+  
+        canvas.onmouseup = function(e){  
+            e.preventDefault()  
+            isMouseDown = false  
+            drawCanvasWithMagnifier( false )  
+        }  
+  
+        canvas.onmouseout = function(e){  
+            e.preventDefault()  
+            isMouseDown = false  
+            drawCanvasWithMagnifier( false )  
+        }  
+  
+        canvas.onmousemove = function(e){  
+            e.preventDefault()  
+            if( isMouseDown == true ){  
+                point = windowToCanvas( e.clientX , e.clientY )  
+                console.log( point.x , point.y )  
+                drawCanvasWithMagnifier( true , point )  
+            }  
+        }  
+  
+        function drawCanvasWithMagnifier( isShowMagnifier , point ){  
+  
+            context.clearRect( 0 , 0 , canvas.width , canvas.height )  
+            context.drawImage( image , 0 , 0 , canvas.width , canvas.height )  
+            if( isShowMagnifier == true ){  
+                drawMagnifier( point )  
+            }  
+        }  
+  
+        function drawMagnifier( point ){  
+  
+            var mr = 200  
+  
+            var imageLG_cx = point.x * scale  
+            var imageLG_cy = point.y * scale  
+  
+            var sx = imageLG_cx - mr  
+            var sy = imageLG_cy - mr  
+  
+            var dx = point.x - mr  
+            var dy = point.y - mr  
+  
+            context.save()  
+  
+            context.lineWidth = 10.0  
+            context.strokeStyle = "#069"  
+  
+            context.beginPath()  
+            context.arc( point.x , point.y , mr , 0 , Math.PI*2 , false )  
+            context.stroke()  
+            context.clip()  
+            context.drawImage( offCanvas , sx , sy , 2*mr , 2*mr , dx , dy , 2*mr , 2*mr )  
+            context.restore()  
+        }  
+       	  Demo: <a href="demo/canvas_details.html" target="_blank">Demo</a>
+	   
+	 </code>
+	 </pre>
+	</figure>
+</div>
+<div>
+ <h1 id="sharelink" class="page-header" >分享link</h1>
+	<figure>
+	 <pre>
+	 <code class="language-html" data-lang="html"> 
+Whatsapp: window.open('whatsapp://send?text='+encodeURIComponent(sharetext),'_blank','toolbar=yes, location=yes, directories=no, status=no, menubar=yes, scrollbars=yes, resizable=no, copyhistory=yes, width=600, height=450,top=100,left=350')
+	   
+LineMe: 'https://line.naver.jp/R/msg/text/?'+encodeURIComponent(sharetext),'
+	   
+FaceBook:'http://www.facebook.com/sharer.php?u='+encodeURIComponent(document.location.href)+'&amp;t='+encodeURIComponent(document.title),'
+	   
+Twitter:'http://twitter.com/home?status='+encodeURIComponent(document.location.href)+' '+encodeURIComponent(document.title),'
+	   
+Google+:'http://www.google.com/bookmarks/mark?op=add&bkmk=+'encodeURIComponent(sharetext)+'&title='+encodeURIComponent(title)'
+	 </code>
+	 </pre>
+	</figure>
+</div>
+</nav>
+<nav class="tip">
+<ul id="navbar-example" class="nav  nav-pills nav-stacked" role="tablist">
+	<li>
+	 <a href="#scoket">WebScoket連接</a>
+	</li>
+	<li>
+	 <a href="#ajax">ajax基本配置</a>
+	</li>
+	<li>
+	 <a href="#smoove">CSS3動畫效果</a>
+	</li>
+	<li>
+	 <a href="#upload">上传图片</a>
+	</li>
+	<li>
+	 <a href="#canvas">canvas切圖</a>
+	</li>
+	<li>
+	 <a href="#fangda">canvas放大鏡</a>
+	</li>
+	<li>
+	 <a href="#sharelink">分享link</a>
+	</li>
+</ul>
+</body>
+<script>
+$(function(){
+$('body').scrollspy({ target: '#navbar-example' })
+$('[data-spy="scroll"]').each(function () {
+  var $spy = $(this).scrollspy('refresh')
+})
+}
+);
+</script>
